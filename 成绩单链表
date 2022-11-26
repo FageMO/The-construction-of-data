@@ -1,0 +1,203 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define NULL 0
+#define NUM 4
+typedef struct stud {
+	char no[10];
+	char name[10];
+	int score[NUM];
+	int total;
+	struct stud *next;
+}linklist;
+char course[8][10] = { "","学号","姓名","语文","数学","英语","政治","总分" };
+linklist* create_list() {
+	linklist* head, * p;
+	head = (linklist*)malloc(sizeof(linklist));
+	if (head == NULL) {
+		return head;
+	}
+	head->next = NULL;
+	while (1) {
+		p = (linklist*)malloc(sizeof(linklist));
+		if (p == NULL) {
+			return head;
+		}
+		printf("请输入学生信息直到输入学号为0时结束：\n\n");
+		fflush(stdin);
+		printf("学号   ");
+		scanf_s("%s",&p->no,10);
+		if (strcmp(p->no, "0") != 0) {
+			printf("姓名   ");
+			scanf_s("%s",&p->name,10);
+			p->total = 0;
+			for (int i = 0; i < NUM; i++) {
+				printf("%s   ", course[i + 3]);
+				scanf_s("%d", &p->score[i]);
+				p->total += p->score[i];
+			}
+			p->next = NULL;
+		}
+		else {
+			free(p);
+			return head;
+		}
+		p->next = head->next;
+		head->next = p;
+	} 
+	return head;
+}
+void printflist(linklist* head) {
+	linklist* p,*tail;
+	tail = (linklist*)malloc(sizeof(linklist));
+	printf("请输入要插入的成绩单：\n\n");
+	printf("学号   ");
+	scanf_s("%s", &tail->no,10);
+	printf("姓名   ");
+	scanf_s("%s", &tail->name, 10);
+	tail->total = 0;
+	for (int i = 0; i < NUM; i++) {
+			printf("%s   ", course[i + 3]);
+			scanf_s("%d", &tail->score[i]);
+			tail->total += tail->score[i];
+		}
+	tail->next = head->next;
+	head->next = tail;
+	p = head->next;
+	if (p == NULL) {
+		printf("该学生成绩单没有数据，请输入数据\n");
+		return;
+	}
+	printf("输出成绩单为：\n");
+	for (int i = 1; i < 8; i++) {
+		printf("%-11s", course[i]);
+	}
+	printf("\n\n");
+	while (p != NULL) {
+		printf("%-10s%-10s   ", p->no, p->name);
+		for (int i = 0; i < NUM; i++)
+			printf("%-10d", p->score[i]);
+		printf("%-10d\n", p->total);
+		p = p ->next;
+	}
+}
+void find(linklist* head) {
+	linklist* p;
+	char a[10];
+	p = head->next;
+	printf("请输入要查找的学号：");
+	scanf_s("%s", a,10);
+	while (p != NULL) {
+		if (strcmp(p->no, a) != 1) {
+			for (int i = 1; i < 8; i++) {
+				printf("%-11s", course[i]);
+			}
+			printf("\n\n");
+			printf("%-10s%-10s   ", p->no, p->name);
+			for (int i = 0; i < NUM; i++)
+				printf("%-10d", p->score[i]);
+			printf("%-10d\n", p->total);
+			break;
+		}
+		p = p->next;
+	}
+	if (p == NULL) printf("不存在该学生\n");
+}
+void delet(linklist* head) {
+	linklist* p,*r;
+	char a[10];
+	p = head->next;
+	r = head;
+	printf("请输入要删除的学号：");
+	scanf_s("%s", a, 10);
+	while (p != NULL) {
+		if (strcmp(p->no, a) ==0) {
+			break;
+		}
+		r = p;
+		p = r->next;
+		
+	}
+	if (p == NULL) {
+		printf("不存在该信息，无法删除\n");
+	}
+	else {
+		r->next = p->next;
+		free(p);
+	}
+}
+void rank(linklist* head) {
+	linklist* r, * p,*pre;
+	int count=0;
+	p = head->next;
+	while (p != NULL) {
+		count++;
+		p = p->next;
+	}
+	
+	for (int i = 0; i < count;i++) {
+		pre = head;
+		p = head->next;
+		while (p->next != NULL) {
+			if (p->total < p->next->total) {
+				r = p->next->next;
+				pre->next=p->next;
+				p->next->next = p;
+				pre = p->next;
+				p->next = r;
+			}
+			else
+			{
+				pre = p;
+				p = p->next;
+			}
+		}
+	}
+	p = head->next;
+	printf("输出成绩单为：\n");
+	for (int i = 1; i < 8; i++) {
+		printf("%-11s", course[i]);
+	}
+	printf("\n\n");
+	while (p != NULL) {
+		printf("%-10s%-10s   ", p->no, p->name);
+		for (int i = 0; i < NUM; i++)
+			printf("%-10d", p->score[i]);
+		printf("%-10d\n", p->total);
+		p = p->next;
+	}
+}
+void mune() {
+	printf("*********学生管理系统*******\n\n");
+	printf("*****[1]createlist**[2]insert\n\n");
+	printf("*****[3]find********[4]delete\n\n");
+	printf("**********[5]rank************\n\n");
+}
+int main() {
+	linklist* head=NULL;
+	int select=-1;
+	mune();
+	while (1) {
+		scanf_s("%d", &select);
+		switch (select) {
+		case 1:
+			head = create_list();
+			break;
+		case 2:
+			printflist(head);
+		break;
+		case 3:
+			find(head);
+			break;
+		case 4:
+			delet(head);
+			break;
+		case 5:
+			rank(head);
+			break;
+		}
+	}
+	
+	
+
+}
