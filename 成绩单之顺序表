@@ -1,0 +1,200 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<assert.h>
+#include<string.h>
+#pragma warning (disable:4996)
+#define MAX 100
+typedef int Data;
+typedef struct {
+	Data* num; //指向学号的首地址
+	//char* name;//指向名字的首地址
+	Data* math;//指向数学成绩的首地址
+	Data* eng;//指向英语成绩的首地址
+	Data* ave;
+	int capacity;
+	int size;
+	char name[100][100];
+}Grade;
+void initgrade(Grade* list) {
+	list->capacity = MAX;
+	list->size = 0;
+	list->num = (int*)calloc(list->capacity, sizeof(Data));
+	list->ave = (int*)calloc(list->capacity, sizeof(Data));
+	list->math = (int*)calloc(list->capacity, sizeof(Data));
+	list->eng = (int*)calloc(list->capacity, sizeof(Data));
+	assert(list->num != NULL);
+	assert(list->ave != NULL);
+	assert(list->math != NULL);
+	assert(list->eng != NULL);
+}
+void meun() {
+	printf("**[1]input**[2]output**\n");
+	printf("**[3]insert**[4]find**\n");
+	printf("**[5]delete**[6]rank**\n");
+}
+void input(Grade* list) {
+	int anum = 0;
+	int amath = 0;
+	int aeng = 0;
+	printf("请输入学号，姓名，数学成绩，英语成绩，直到输入学号为零结束\n:");
+	for (int i = 0; i < 100; i++) {
+		scanf_s("%d", &anum);
+		if (anum == 0) {
+			break;
+		}
+		scanf_s("%s", list->name[i], 100);
+		scanf_s("%d", &amath);
+		scanf_s("%d", &aeng);
+		list->num[list->size] = anum;
+		list->math[list->size] = amath;
+		list->eng[list->size] = aeng;
+		list->size++;
+	}
+
+}
+void output(Grade* list) {
+	for (int j = 0; j < list->size; j++) {
+		list->ave[j] = (list->math[j] + list->eng[j]) / 2;
+	}
+	printf("输出学生成绩单：\n");
+	for (int i = 0; i < list->size; i++) {
+		printf("num:%d   ", list->num[i]);
+		printf("name: %s ", list->name[i]);
+		printf("math:%d   ", list->math[i]);
+		printf("eng:%d   ", list->eng[i]);
+		printf("ave:%d", list->ave[i]);
+		printf("\n");
+	}
+}
+void insert(Grade* list) {
+	if (list->size >= list->capacity) {
+		return;
+	}
+	list->size++;
+	int i;
+	int anum = 0, amath = 0, aeng = 0,aave=0;
+	char aname[50];
+	printf("请输入要插入学生成绩：");
+	scanf_s("%d", &anum);
+	scanf_s("%s", aname,50);
+	scanf_s("%d", &amath);
+	scanf_s("%d", &aeng);
+	printf("请输入要插入的下标：");
+	scanf_s("%d", &i);
+	for (int j = list->size - 1; j > i; j--) {
+		list->num[j] = list->num[j-1];
+		list->math[j] = list->math[j-1];
+		list->eng[j] = list->eng[j-1];
+		strcpy_s(list->name[j], list->name[j-1]);
+	}
+	list->num[i] = anum;
+	list->math[i] = amath;
+	list->eng[i] = aeng;
+	strcpy_s(list->name[i], aname);
+
+}
+void find(Grade* list) {
+	printf("请输入要查找的学号;");
+		int a;
+	scanf_s("%d", &a);
+	for (int i = 0; i < list->size; i++) {
+		if (list->num[i] == a) {
+			printf("num:%d  name:%s  math:%d   eng:%d   ave:%d\n", list->num[i], list->name[i], list->math[i], list->eng[i],list->ave[i]);
+			break;
+		}	
+		if (i == list->size - 1) {
+			printf("不存在此学号的学生\n");
+		}
+	}
+	
+}
+void delet(Grade* list) {
+	printf("请输入该学生学号：");
+	int a;
+	scanf_s("%d", &a);
+	for (int i = 0; i < list->size; i++) {
+		if (list->num[i] == a) {
+			for (int j = i; j < list->size-1; j++) {
+				list->num[j] = list->num[j + 1];
+				list->math[j] = list->math[j + 1];
+				list->eng[j] = list->eng[j + 1];
+				list->ave[j] = list->ave[j + 1];
+				strcpy_s(list->name[j], list->name[j + 1]);
+				break;
+			}
+			list->size--;
+			break;
+		}
+		if (i == list->size) {
+			printf("该学生不存在\n");
+		}
+	}
+}
+void rank(Grade* list) {
+	int aave;
+	int amath;
+	int aeng;
+	int anum;
+	char aname[100];
+	for (int i = 0; i < list->size; i++) {
+		for (int j = 0; j < list->size; j++) {
+			if (list->ave[j] < list->ave[j + 1]) {
+				aave = list->ave[j + 1];
+				list->ave[j + 1] = list->ave[j];
+				list->ave[j] = aave;
+				anum = list->num[j + 1];
+				list->num[j + 1] = list->num[j];
+				list->num[j] = anum;
+				amath = list->math[j + 1];
+				list->math[j + 1] = list->math[j];
+				list->math[j] = amath;
+				aeng = list->eng[j + 1];
+				list->eng[j + 1] = list->eng[j];
+				list->eng[j] = aeng;
+				strcpy_s(aname, list->name[j + 1]);
+				strcpy_s(list->name[j+1], list->name[j]);
+				strcpy_s(list->name[j],aname);
+			}
+		}
+	}
+	printf("输出排序结果：\n");
+		for (int m = 0; m < list->size; m++) {
+			printf("num:%d   ", list->num[m]);
+			printf("name: %s ", list->name[m]);
+			printf("math:%d   ", list->math[m]);
+			printf("eng:%d   ", list->eng[m]);
+			printf("ave:%d", list->ave[m]);
+			printf("\n");
+		}
+}
+int main() {
+	Grade list;
+	int select = -1;
+	initgrade(&list);
+	meun();
+	while (1) {
+		scanf_s("%d", &select);
+		switch (select) {
+		case 1:
+			input(&list);
+			break;
+		case 2:
+			output(&list);
+			break;
+		case 3:
+			insert(&list);
+			break;
+		case 4:
+			find(&list);
+			break;
+		case 5:
+			delet(&list);
+			break;
+		case 6:
+			rank(&list);
+			break;
+		}
+	}
+	system("pause");
+	return 0;
+}
