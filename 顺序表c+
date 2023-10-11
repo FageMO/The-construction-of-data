@@ -1,0 +1,75 @@
+#include<iostream>
+using namespace std;
+const int N = 100;
+class SequentList {
+private:
+	int s[100];
+	int len;
+public:
+	SequentList():len(0){}
+	void initlist(int index) {
+		s[len] = index;
+		len++;
+	}
+	void prin() {
+		cout << "输出表为" << endl;
+		for (int i = 0; i < len; i++) {
+			cout << s[i]<<" ";
+		}
+		cout << endl;
+	}
+	int  show(int n) {
+		return s[n];
+	}
+	void pai() {
+		int m;
+		for (int i = 0; i < len-1; i++) {
+			for (int j = 0; j < len-1; j++) {
+				if (s[j] > s[j + 1]) {
+					m = s[j + 1];
+					s[j + 1] = s[j];
+					s[j] = m;
+				}
+			}
+		}
+	}
+	void inset(int index,int n) {
+		int m,z;
+		m = index;
+		len++;
+		for (int i = n; i < len; i++) {
+			z = s[i];
+			s[i] = m;
+			m = z;
+		}
+	}
+	void delet(int n) {
+		for (int i = n; i < len-1; i++) {
+			s[i] = s[i + 1];
+		}
+		len--;
+	}
+};
+int main() {
+	SequentList a1;
+	int n;
+	cout << "请输入你的顺序表以0结束\n";
+	for (int i = 0;; i++) {
+		cin >> n;
+		if (n == 0) break;
+		a1.initlist(n);
+	}
+	a1.prin();
+	cout << "排序后为" << endl;
+	a1.pai();
+	a1.prin();
+	cout << "插入后为\n";
+	a1.inset(5, 2);
+	a1.prin();
+	cout << "删除后为\n";
+	a1.delet(3);
+	a1.prin();
+	cout << "查找下标为2的数\n";
+	cout << a1.show(2) << endl;
+	return 0;
+}
