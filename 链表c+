@@ -1,0 +1,118 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+const int N = 10;
+struct Studentlist {
+	string sname, sex;
+	int snum, score;
+};
+struct Squentlist {
+	Studentlist data;
+	Squentlist* next;
+};
+class Linklist {
+private:
+	int len;
+	Squentlist* head;
+public:
+	Linklist() :len(0) {
+		head = new Squentlist;
+		//head->data.sname = 0;
+		head->next = nullptr;
+	}
+	void create(int n) {
+		Squentlist* s = head;
+		len = n;
+		int i = 1;
+		while (i <= n) {
+			Squentlist* p = new Squentlist;
+			cout << "请输入第" << i << "个节点的数据" << endl;	
+			cin >> p->data.sname;
+			s->next = p;
+			s= p;  
+			i++;
+		}
+		s->next = nullptr;
+	}
+	void getlength() {
+		cout << "链表的长度为:" << len;
+		cout<< endl;
+	}
+	void prin() {
+		Squentlist *p = head->next;
+		if (len == 0) {
+			cout << "链表为空\n";
+			return;
+		}
+		int i = 1;
+		cout << "输出链表为:" << endl;
+		while (p) {
+			cout << "输入第" << i << "个节点的信息" << endl;
+			cout << p->data.sname << endl;
+			p=p->next;
+			i++;
+		}
+		cout << endl;
+	}
+	void Inset() {
+		Squentlist* q = head->next;
+		Squentlist* s = new Squentlist;
+		string n;
+		int  m;
+		cout << "请输入你要插入的数据和位置下标\n";
+		cin >> n>>m;
+		s->data.sname = n;
+		for (int i = 1; i <m; i++) {
+			q = q->next;
+		}
+		s->next = q->next;
+		q->next = s;
+		len++;
+	}
+	void Delet() {
+		Squentlist* p = head->next;
+		Squentlist* s = new Squentlist;
+		int m;
+		cout << "请输入你要删除的下标\n";
+		cin >> m;
+		for (int i = 1; i < m; i++) {
+			p = p->next;
+		}
+		s->next = p->next->next;
+		p->next = s->next;
+		len--;
+	}
+	void find() {
+		Squentlist* q = head->next;
+		string m;
+		int i=0;
+		cout << "请输入你要查找的数据\n";
+		cin >> m;
+		while (q) {
+			if (q->data.sname==m) {
+				break;
+			}
+			q = q->next;
+			i++;
+		}
+		cout << "查找数据的下标是:" << i << endl;
+	}
+	
+};
+int main() {
+	Linklist a;
+	int n;
+	cout << "请输入你要输入的节点数\n";
+	cin >> n;
+	a.create(n);
+	a.prin();
+	a.getlength();
+	a.Inset();
+	a.prin();
+	a.getlength();
+	a.Delet();
+	a.prin();
+	a.getlength();
+	a.find();
+	return 0;
+}
