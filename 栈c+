@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+const int N = 5;
+class Zlist {
+private:
+	int data[N];
+	int top;
+	//int len;
+public:
+	Zlist():top(-1){
+	}
+	bool zlistempty();
+	bool zlistfull();
+	bool pop(int a);
+	bool push();
+	bool prin();
+	int getlength();
+};
+bool Zlist::zlistempty() {
+	if (top == -1)
+		return true;
+	return false;
+}
+bool Zlist::zlistfull() {
+	if (top == N-1)
+		return true;
+	return false;
+}
+bool Zlist::pop(int a) {
+	if (zlistfull()==1)
+		return false;
+	data[++top] = a;
+	return true;
+}
+bool Zlist::push() {
+	if (zlistempty())
+		return false;
+	int x;
+	x = data[top--];
+	cout << "出栈元素为:" << x<<endl;
+}
+int Zlist::getlength() {
+	int n;
+	n = top + 1;
+	return n;
+}
+bool Zlist::prin() {
+	if (zlistempty()==1)
+		return false;
+	for (int i = top; i >= 0; i--) {
+		cout << data[i] << endl;
+	}
+	return true;
+}
+int main() {
+	Zlist a;
+	a.pop(1);
+	a.pop(3);
+	a.pop(5);
+	a.pop(7);
+	//a.pop(9);
+	a.prin();
+	a.push();
+	a.prin();
+	return 0;
+}
