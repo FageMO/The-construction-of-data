@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define N 10
+typedef struct stu {
+	int data[N];
+	int top;
+}linklist;
+linklist* initlist() {
+	linklist* p;
+	p = (linklist*)malloc(sizeof(linklist));
+	p->top = -1;
+	return p;
+}
+bool listempty(linklist* p) {
+	if (p->top == -1) {
+		return true;
+	}
+	else
+		return false;
+}
+bool listfull(linklist* p) {
+	if (p->top == N-1) {
+		return true;
+	}
+	else
+		return false;
+}
+bool push(linklist* p,int m) {
+	if (listfull(p) == 1) {
+		return false;
+	}
+	printf("进栈元素是 %d\n", m);
+	p->data[++p->top] = m;
+	return true;
+}
+bool pop(linklist* p) {
+	if (listempty(p) == 1) {
+		return false;
+	}
+	printf("出栈元素是 %d\n", p->data[p->top--]);
+	printf("\n\n");
+	return true;
+}
+int getlength(linklist *p) {
+	return p->top + 1;
+	printf("\n\n");
+}
+bool prin(linklist *p) {
+	if (listempty(p) == 1)
+		return false;
+	for (int i = p->top; i > -1; i--) {
+		printf("第%d个元素是 %d\n", i+1, p->data[i]);
+	}
+	printf("\n\n");
+	return true;
+}
+int main() {
+	linklist* q;
+	q = initlist();
+	push(q, 1);
+	push(q, 3);
+	push(q, 5);
+	push(q, 7);
+	printf("\n\n");
+	prin(q);
+	printf("栈的长度为%d\n",getlength(q));
+	pop(q);
+	prin(q);
+	printf("栈的长度为%d\n", getlength(q));
+	return 0;
+}
