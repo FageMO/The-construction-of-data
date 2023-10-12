@@ -1,0 +1,136 @@
+#include <iostream>
+using namespace std;
+const int N = 10;
+struct list {
+	string sname;
+	int score;
+	list* rear;
+};
+class Array {
+private:
+	list* front;
+	int length;
+public:
+	Array() :length(0) {
+		front = new list;
+		front->rear = nullptr;
+	}
+	void Inset();
+	void Output();
+	bool prin();
+}; 
+void Array::Inset() {
+	list* q = front;
+	list* s = new list;
+	string n;
+	int  m;
+	cout << "插入"<<endl;
+	cin >> n >> m;
+	s->sname = n;
+	s->score = m;
+	for (int i = 0; i<length; i++) {
+		q = q->rear;
+	}
+	s->rear = q->rear;
+	q->rear = s;
+	length++;
+}
+void Array::Output() {
+	list* p = front->rear;
+	list* s = front->rear;
+	list* a = front;
+	list* q = new list;
+	int n=0;
+	int max;
+	max = p->score;
+	for (int i = 1; i < length; i++) {
+		p = p->rear;
+		if ((p->score) > max) {
+			max = p->score;
+		}
+	}
+	while (s) {
+		if (s->score == max) break;
+		s = s->rear;
+		n++;
+	}
+	cout << "出队元素\n" << s->sname << "," << s->score << endl;
+	if (n == 0) {
+		q->rear = a->rear->rear;
+		a->rear = q->rear;
+		length--;
+	}
+	else {
+	for (int i = 1; i <= n; i++) {
+		a = a->rear;
+	}
+	q->rear = a->rear->rear;
+	a->rear = q->rear;
+	length--;
+	}
+	
+	
+}
+bool Array::prin() {
+	list* r, * p, * pre;
+	int count = 0;
+	p = front->rear;
+	if (length == 0) {
+		cout << "链表为空\n";
+		return false;
+	}
+	while (p != NULL) {
+		count++;
+		p = p->rear;
+	}
+
+	for (int i = 0; i < count; i++) {
+		pre = front;
+		p = front->rear;
+		while (p->rear != NULL) {
+			if (p->score < p->rear->score) {
+				r = p->rear->rear;
+				pre->rear = p->rear;
+				p->rear->rear = p;
+				pre = p->rear;
+				p->rear = r;
+			}
+			else
+			{
+				pre = p;
+				p = p->rear;
+			}
+		}
+	}
+	list* q = front->rear;
+	int i = 1;
+	cout << "出队表为:" << endl;
+	while (q) {
+		cout <<"["<<q->sname << "," << q->score <<"]"<< endl;
+		q = q->rear;
+		i++;
+	}
+
+	return 0;
+}
+int main() {
+	Array a1;
+	int select = -1;
+	cout << "[1]是入队  [2]是出队  [3]是输出表" << endl;
+	while (1) {
+		cin >> select;
+		switch (select) {
+		case 1:
+			a1.Inset();
+			break;
+		case 2:
+			a1.Output();
+			break;
+		case 3:
+			a1.prin();
+			break;
+		
+		}
+	}
+	return 0;
+}
