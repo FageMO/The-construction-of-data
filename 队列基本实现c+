@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+const int N = 6;
+class Array {
+private:
+	int data[N];
+	int front;
+	int rear;
+public:
+	Array():front(0),rear(0){}
+	bool Arrayempty();
+	bool Arrayfull();
+	bool Inset(int n);
+	bool Output();
+	int getlength();
+	int gethead();
+	int getback();
+	void prin();
+};
+bool Array::Arrayfull() {
+	if ((rear + 1) % N == front)
+		return true;
+	return false;
+}
+bool Array::Arrayempty() {
+	if (rear == front) {
+		return true;
+	}
+	return false;
+}
+bool Array::Inset(int n) {
+	if (Arrayfull() == 1) {
+		cout << "队满" << endl;
+		return false;
+	}
+	data[rear] = n;
+	rear = (rear + 1) % N;
+	return true;
+}
+bool Array::Output() {
+	if (Arrayempty() == 1) {
+		return false;
+	}
+	int m;
+	m = data[front];
+	cout << "出队元素是" << m << endl;
+	front = (front + 1) % N;
+}
+int Array::getlength() {
+	return (rear + N - front) % N;
+}
+void Array::prin() {
+	if (Arrayempty() == 1) {
+		cout << "队列为空";
+	}
+	int i;
+	i = front;
+	cout << "输出表为" << endl;
+	while (i != rear) {
+		cout << data[i] << "  ";
+		i = (i + 1 ) % N;
+	}
+	cout << endl;
+}
+int Array::gethead() {
+	if (Arrayempty() == 1) {
+		cout << "队列为空" << endl;
+	}
+	return data[front];
+}
+int Array::getback() {
+	if (Arrayempty() == 1) {
+		cout << "队列为空" << endl;
+	}
+	return data[(rear-1+N)%N];
+}
+int main() {
+	Array a1;
+	a1.Inset(1);
+	a1.Inset(3);
+	a1.Inset(5);
+	a1.Inset(7);
+	a1.Inset(9);
+	a1.prin();
+	cout<<"队列长度为"<<a1.getlength()<<endl;
+	cout << "队头元素" << a1.gethead() << endl;
+	cout << "队尾元素" << a1.getback() << endl;
+	a1.Output();
+	a1.Output();
+	a1.prin();
+	a1.Inset(6);
+	a1.prin();
+	cout << "队列长度为" << a1.getlength() << endl;
+	cout << "队头元素" << a1.gethead() << endl;
+	cout << "队尾元素" << a1.getback() << endl;
+	return 0;
+}
