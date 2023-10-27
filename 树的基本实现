@@ -1,0 +1,79 @@
+#include <iostream>
+using namespace std;
+int sum = 1;
+char s[100];
+int len = 0;
+struct Tree {
+	char data;
+	Tree* lefttree;
+	Tree* righttree;
+};
+void previsit(Tree* p);
+void Inset();
+Tree* createtree( int n);
+
+
+void Inset() {
+	cout << "请输入你要输入的树的顺序数据直到输入0结束\n";
+	for (int i = 1; i < 100; i++) {
+		cin >> s[i];
+		if (s[i] == '0') break;
+		sum++;
+	}
+	sum--;
+}
+Tree* createtree(int n) {
+	Tree* p = new Tree;
+	if (s[n] == '*') {
+		p = nullptr;
+		return nullptr;
+	}
+	
+	p->data = s[n];
+	p->lefttree = nullptr;
+	p->righttree = nullptr;
+	if (n * 2 <= sum) {
+		p->lefttree=createtree( n * 2);
+	}
+	if (n * 2 + 1 <= sum) {
+		p->righttree=createtree(n * 2 + 1);
+	}
+	len++;
+	return p;
+}
+void previsit(Tree* p) {
+	if (p != nullptr) {
+		cout << p->data;
+		previsit(p->lefttree);
+		previsit(p->righttree);
+	}
+	return;
+}
+void minvisit(Tree *p) {
+	if (p != nullptr) {
+		previsit(p->lefttree);
+		cout << p->data;
+		previsit(p->righttree);
+	}
+}
+void oldvisit(Tree* p) {
+	if (p != nullptr) {
+		previsit(p->lefttree);
+		
+		previsit(p->righttree);
+		cout << p->data;
+	}
+}
+int main() {
+	Tree* a = nullptr;
+	Inset();
+	a=createtree( 1);
+	cout << "先序:\n";
+	previsit(a);
+	cout << "\n中序:\n";
+	minvisit(a);
+	cout << "\n后序:\n";
+	oldvisit(a);
+	cout << "\n树的节点数为\n"<<len;
+	return 0;
+}
