@@ -1,0 +1,86 @@
+#include <iostream>
+using namespace std;
+struct Tree {
+	char data;
+	Tree *Left;
+	Tree* Right;
+};
+//用了指针引用！！！
+class Treelist {
+public:
+	char s[100];
+    int sum ;
+	Tree* gen;
+	int n ;
+public:
+	Treelist():sum(1),n(1){
+		gen = new Tree;
+	}
+	void Inset();
+	void createtree(Tree *&p,int n);
+	void previsit(Tree *p);//要改变的才要用指针的引用，创建用，便利用首地址就好
+	void minvisit(Tree *p);
+	void backvisit(Tree *p);
+};
+void Treelist::Inset() {
+	cout << "请输入你要输入的树的顺序数据直到输入0结束\n";
+	for (int i = 1; i < 100; i++) {
+		cin >> s[i];
+		if (s[i] == '0') break;
+		sum++;
+	}
+	sum--;
+}
+void Treelist ::createtree(Tree *&p,int n) {
+	if (n == 1) p = gen;
+	else p = new Tree;
+	
+	if (s[n] == '*') {
+		p = nullptr;
+		return ;
+	}
+
+	p->data = s[n];
+	p->Left = nullptr;
+	p->Right = nullptr;
+	if (n * 2 <= sum) {
+		createtree(p->Left,n * 2);
+	}
+	if (n * 2 + 1 <= sum) {
+		createtree(p->Right,n * 2 + 1);
+	}
+}
+void Treelist::previsit(Tree *p) {
+	if (p!= nullptr) {
+		cout << p->data;
+		previsit(p->Left);
+		previsit(p->Right);
+	}
+}
+void Treelist::minvisit(Tree *p) {
+	if (p != nullptr) {
+		previsit(p->Left);
+		cout << p->data;
+		previsit(p->Right);
+	}
+}
+void Treelist::backvisit(Tree *p) {
+	if (p != nullptr) {
+		previsit(p->Left);
+		previsit(p->Right);
+		cout << p->data;
+	}
+}
+int main() {
+	Treelist a1;
+	a1.Inset();
+	a1.createtree(a1.gen,1);
+	
+	cout << "先序:\n";
+	a1.previsit(a1.gen);
+	cout << "\n中序:\n";
+	a1.minvisit(a1.gen);
+	cout << "\n后序:\n";
+	a1.backvisit(a1.gen);
+	return 0;
+}
