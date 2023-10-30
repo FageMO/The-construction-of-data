@@ -1,0 +1,104 @@
+#include <iostream>
+using namespace std;//哈希表用来统计出现的数，是整数的时候也可以用来排序
+const int N = 100;//对于复杂的可以设计哈希函数，现在就先用整数在100之内
+class Table {
+private:
+	int a[5];
+	int hash[N];
+	int len;
+public:
+	Table() :len(0) {
+		for (int i = 0; i < N; i++) {
+			hash[i] = 0;
+		}
+	}
+	void Input() {
+		cout << "请输入要输入的数据:\n";
+		for (int i = 0; i < 5; i++) {
+			cin >> a[i];
+			len++;
+		}
+	}
+	int hash_fun(int n) {
+		return n;
+	}
+	void prin() {
+		for (int i = 0; i < 5; i++) {
+			hash[hash_fun(a[i])]++;
+		}
+		for (int i = 0; i < N; i++) {
+			if (hash[i] != 0) {
+				cout << i << "出现了" << hash[i] << "次\n";
+			}
+		}
+	}
+	void Rink() {
+		for (int i = 0; i < N; i++) {
+			if (hash[i] != 0) {
+				for(int j=0;j<hash[i];j++)
+				cout << i << " ";
+			}
+		}
+	}
+};
+int main() {
+	Table a1;
+	a1.Input();
+	a1.prin();
+	a1.Rink();
+	return 0;
+}
+
+
+
+
+
+#include <iostream>//简单设计哈希函数为n%5
+using namespace std;//线性探查法解决冲突（向后线性排）
+const int N = 10;
+struct Hash {
+	int hash[N];
+	int data[5];
+};
+void initHash(Hash *&p) {
+	p = new Hash;
+	for (int i = 0; i < N; i++) {
+		p->hash[i] = 0;
+	}
+	cout << "请输入你要输入的数据:\n";
+	for (int i = 0; i < 5; i++) {
+		cin >> p->data[i];
+	}
+}
+int hash_fun(Hash* p,int n) {
+	int index = n % 5;
+	while(p->hash[index] != 0) {
+		index++;
+	}
+	return index;
+}
+void Inputhash(Hash*&p) {
+	for (int i = 0; i < 5; i++) {
+		p->hash[hash_fun(p, p->data[i])] = p->data[i];
+	}
+}
+void Select(Hash* p,int n) {
+	int index = n % 5;
+	while (p->hash[index] != 0) {
+		if (p->hash[index] == n) {
+			cout << "你要查找数据"<<n<<"的下标：" << index << endl;
+			return;
+		}
+		index++;
+	}
+	cout << "你要查找的数据不存在\n";
+}
+int main() {
+	Hash* s;
+	initHash(s);
+	Inputhash(s);
+	for (int i = 0; i < 5; i++) {
+		Select(s,s->data[i]);
+	}
+	return 0;
+}
