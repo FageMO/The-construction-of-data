@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;//快速排序是冒泡排序的优化
+const int N = 10;
+void pai(int*&p,int l,int r) {
+	if (l > r) return;
+	int i = l, j = r;
+	int index = p[i];
+	while (i < j) {
+		while (i < j && p[j] > index) j--;
+		if (i < j) p[i++] = p[j];
+		while (i<j && p[i]<index) i++;
+		if (i < j) p[j--] = p[i];
+	}
+	p[i] = index;
+	pai(p, l, i - 1);
+	pai(p, i + 1, r);
+}
+void output(int* p) {
+	for (int i = 0; i < N; i++) {
+		cout << p[i] << " ";
+	}
+}
+int main() {
+	int *a=new int [N];
+	for (int i = 0; i < N; i++) {
+		cin >> a[i];
+	}
+	pai(a,0,N-1);
+	output(a);
+	return 0;
+}
+
+
+
+#include <iostream>
+using namespace std;//插入排序
+const int N = 5;
+void pai(int* p) {
+	int index;
+	int j;
+	for (int i = 1; i < N; i++) {
+		index = p[i];
+		for ( j = i-1; j >= 0&&index>p[j]; j--) 
+			p[j + 1] = p[j];
+		p[j + 1] = index;
+	}
+}
+void output(int* p) {
+	for (int i = 0; i < N; i++) {
+		cout << p[i] << " ";
+	}
+}
+int main() {
+	int a[N];
+	for (int i = 0; i < N; i++) {
+		cin >> a[i];
+	}
+	pai(a);
+	output(a);
+	return 0;
+}
