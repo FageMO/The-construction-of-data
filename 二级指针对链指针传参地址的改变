@@ -35,3 +35,22 @@ int main() {
 	}
 	return 0;
 }
+
+
+#include <iostream>
+using namespace std;
+void Test(int *p) {
+	for (int i = 0; i < 10; i++) {
+		p[i] = i;
+	}
+	
+
+}
+int main() {
+	int* q=new int[10];
+	Test(q);
+	for (int i = 0; i < 10; i++) {
+		cout << q[i];
+	}
+	return 0;
+}
