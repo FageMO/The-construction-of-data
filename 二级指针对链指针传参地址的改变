@@ -1,4 +1,4 @@
-//指针传参的时候只改变值用一维数组就可以了，要是改变地址或者动态分配地址要用二维（new）
+//指针传参的时候只改变值用一维数组就可以了，要是改变地址或者动态分配地址要用二维（new）,还有解引用（*&p）
 #include <iostream>
 using namespace std;
 void Test(int** p) {//这个p地址是存着q地址的地址，还多了一层解引用
@@ -70,6 +70,28 @@ void Test(int **p) {
 int main() {
 	int* q= NULL;
 	Test(&q);
+	for (int i = 0; i < 10; i++) {
+		cout << q[i];
+	}
+	return 0;
+}
+
+
+
+//指针解引用也可以实现指针地址的分配
+#include <iostream>
+using namespace std;
+void Test(int* &p) {
+	p = new int[10];
+	for (int i = 0; i < 10; i++) {
+		p[i] = i;
+	}
+
+
+}
+int main() {
+	int* q =nullptr;
+	Test(q);
 	for (int i = 0; i < 10; i++) {
 		cout << q[i];
 	}
